@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Fire",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/3/30/Fire.png",
+        "unlocked": true
+    },
+    {
+        "name": "Earth",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/1/1e/Earth.png",
+        "unlocked": true
+    },
+    {
+        "name": "Air",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/5/5f/Air.png",
+        "unlocked": true
+    },
+    {
+        "name": "Water",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/9/9d/Water.png",
+        "unlocked": true
+    }
+    ,
+    {
+        "name": "Dust",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/1/19/Dust.png",
+        "unlocked": true
+    }
+    ,
+    {
+        "name": "Energy",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/a/a9/Energy.png",
+        "unlocked": true
+    }
+
+    ,
+    {
+        "name": "Lava",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/2/27/Lava.png",
+        "unlocked": true
+    }
+
+    ,
+    {
+        "name": "Mud",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/3/39/Mud.png",
+        "unlocked": true
+    }
+
+    ,
+    {
+        "name": "Pressure",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/6/6d/Pressure.png",
+        "unlocked": true
+    }
+
+    ,
+    {
+        "name": "Rain",
+        "img": "https://static.wikia.nocookie.net/little-alchemy/images/1/1d/Rain.png",
+        "unlocked": true
+    }
+]
