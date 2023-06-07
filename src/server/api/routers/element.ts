@@ -87,7 +87,7 @@ export const elementRouter = createTRPCRouter({
             images: z.array(Image)
         }))
         .mutation(async ({ ctx, input: { imageElements, images } }) => {
-            // LOOK FOR A WAY TO MAKE THIS FASTER
+            // LOOK FOR A WAY TO MAKE THIS FUNCTION FASTER
 
             if (imageElements.length > 0) {
                 const ElementsDb = await ctx.prisma.element.findMany({

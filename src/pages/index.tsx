@@ -1,12 +1,10 @@
 import { type NextPage } from "next";
-// import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-// import { api } from "~/utils/api";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -26,12 +24,9 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          {/* <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
+          <div className="flex flex-col items-center gap-2">
             <AuthShowcase />
-          </div> */}
+          </div>
         </div>
       </main>
     </>
@@ -40,7 +35,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-/* const AuthShowcase: React.FC = () => {
+const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
@@ -63,4 +58,4 @@ export default Home;
       </button>
     </div>
   );
-}; */
+};
