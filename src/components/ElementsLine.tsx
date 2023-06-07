@@ -1,27 +1,21 @@
-import React from 'react'
-// import { useSession } from "next-auth/react";
-// import { api } from "~/utils/api";
-import Elements from '../server/elements.json'
-
-type ElementsLineProps = {
-  handleClick: (elementSended: Element) => void
-}
 
 type Element = {
+  id: string;
   name: string;
   img: string;
   unlocked: boolean
 }
 
+type ElementsLineProps = {
+  handleClick: (elementSended: Element) => void
+  allElementsDB: Element[]
+}
 
 
-function ElementsLine({handleClick}: ElementsLineProps) {
-  // const { data: sessionData } = useSession()
 
-  const allElements = organizeAndSeparateArray(Elements)
 
-  // console.log("element", api.element.getAllElements.useQuery())
-  // console.log("example", api.example.getAll.useQuery().data)
+function ElementsLine({ handleClick, allElementsDB }: ElementsLineProps) {
+  const allElements = allElementsDB ? organizeAndSeparateArray(allElementsDB) : undefined
 
   function organizeAndSeparateArray(arr: Element[]): { [letter: string]: Element[] } {
     const sortedArray = arr.sort((a, b) => a.name.localeCompare(b.name)); // Sort the array by the 'name' property
@@ -41,9 +35,10 @@ function ElementsLine({handleClick}: ElementsLineProps) {
   }
 
   return (
-    <div className='z-10 shrink-0 border-white  bg-orange-100 w-[10rem] md:w-[15rem]'>
-      <div className="overflow-x-auto h-full overflow-y-scroll">
-        {/* <table className='table table-pin-rows'> */}
+    <div className='z-10 shrink-0 border-white bg-base-300 w-[10rem] md:w-[15rem]'>
+      {
+        allElements &&
+        <div className="overflow-x-auto h-full overflow-y-scroll">
           {
             Object.entries(allElements).map(([letter, objects]) => {
               return (
@@ -56,12 +51,12 @@ function ElementsLine({handleClick}: ElementsLineProps) {
                   <tbody className='w-full'>
                     {objects.map((obj, index) => {
                       if (obj.unlocked === true) {
-                        return(
+                        return (
                           <tr key={index}>
-                              <td className='flex items-center gap-2 cursor-grab' onClick={() => handleClick(obj)}>
-                                <img className='h-10' src={obj.img} alt={obj.name} loading='lazy' />
-                                {obj.name}
-                              </td>
+                            <td className='flex items-center gap-2 cursor-grab' onClick={() => handleClick(obj)}>
+                              <img className='h-10' src={obj.img} alt={obj.name} loading='lazy' />
+                              {obj.name}
+                            </td>
                           </tr>
                         )
                       }
@@ -71,8 +66,7 @@ function ElementsLine({handleClick}: ElementsLineProps) {
               )
             })
           }
-        {/* </table> */}
-      </div>
+        </div>}
     </div>
   )
 }

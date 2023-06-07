@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import Display from '~/components/Display'
 import ElementsLine from '~/components/ElementsLine'
 import Head from "next/head";
-import Elements from '../server/elements.json'
+import { api } from '~/utils/api';
+// import Elements from '../server/elements.json'
 
 //https://littlealchemy.com
 //http://localhost:3000/main
@@ -15,20 +16,13 @@ import Elements from '../server/elements.json'
 
 //https://www.npmjs.com/package/react-draggable
 
-type Combination = {
-  [key: string]: string[]
-}
 
-const allCombinations: Combination = {
-  "Dust": ["Earth + Air", "Air + Earth"]
-  ,"Energy": ["Air + Fire", "Fire + Air"]
-  ,"Lava": ["Earth + Fire", "Fire + Earth"]
-  ,"Mud": ["Earth + Water", "Water + Earth"]
-  ,"Pressure": ["Earth + Earth", "Air + Air"]
-  ,"Rain": ["Water + Air", "Air + Water"]
-}
+//https://www.prisma.io/dataguide/mongodb/managing-documents 
+//https://www.prisma.io/docs/guides/database/mongodb
+
 
 type Element = {
+  id: string;
   name: string;
   img: string;
   unlocked: boolean
@@ -43,73 +37,77 @@ type Image = {
   }
 }
 
+type ImageDOM = {
+  alt: string;
+  bottom: number,
+  height: number,
+  left: number,
+  right: number,
+  top: number,
+  width: number,
+  x: number,
+  y: number,
+}
+
 function main() {
   const [images, setImages] = useState<Image[]>([]);
+  const [imagesDOM, setImagesDOM] = useState<ImageDOM[]>([])
+  const [allElementsDB, setAllElementsDB] = useState<Element[]>([])
+
+  const getAllElementsDB = api.element.getAllElements.useMutation({
+    onSuccess: (allElementsUnlocked) => {
+      console.log(allElementsUnlocked)
+      setAllElementsDB(allElementsUnlocked)
+    }
+  })
+
+  const changeVisibilityElement = api.element.unlockElement.useMutation({
+    onSuccess: (newArrayElements: Image[] | void) => {
+      if (newArrayElements !== undefined) {
+        console.log(newArrayElements)
+        setImages(newArrayElements)
+      }
+    }
+  })
+
+  const resetAllElementsCreated = api.element.reset.useMutation({
+    onSuccess: () => {
+      setImages([])
+      setImagesDOM([])
+    }
+  })
+
+  function handleReset(){
+    resetAllElementsCreated.mutate()
+
+    window.location.reload()
+  }
+
+  function handleDrag(){
+    changeVisibilityElement.mutate({imageElements: imagesDOM, images})
+    getAllElementsDB.mutate()
+  }
 
   useEffect(() => {
-    const areOverlapping = (rect1: DOMRect, rect2: DOMRect): boolean => {
-      return (
-        rect1.left < rect2.right &&
-        rect1.right > rect2.left &&
-        rect1.top < rect2.bottom &&
-        rect1.bottom > rect2.top
-      );
-    };
+    const imageElements: NodeListOf<HTMLImageElement> = document.querySelectorAll('.img-display');
+    const imageElementsArray: HTMLImageElement[] = Array.from(imageElements);
 
-    const checkForOverlaps = () => {
-      // const imageElements = document.querySelectorAll('img');
-      const imageElements = document.querySelectorAll('img');
-
-      for (let i = 0; i < imageElements.length; i++) {
-        const rect1 = imageElements[i]?.getBoundingClientRect();
-        const image1 = images[i]
-
-        for (let j = i + 1; j < imageElements.length; j++) {
-          const rect2 = imageElements[j]?.getBoundingClientRect();
-          const image2 = images[j]
-
-          if ((rect1 !== undefined && rect2 !== undefined) && (image1 !== undefined && image2 !== undefined)) {
-            if (areOverlapping(rect1, rect2)) {
-              console.log(`Images-${imageElements[i]?.alt} ${i + 1} and Images-${imageElements[j]?.alt} ${j + 1} are overlapping.`);
-              const combination = `${imageElements[i]?.alt} + ${imageElements[j]?.alt}`
-
-              let foundKey: string | undefined;
-
-              Object.entries(allCombinations).forEach(([key, value]) => {
-                if (Array.isArray(value) && value.includes(combination)) {
-                  foundKey = key;
-                }
-              });
-
-              const lastPosition = image1.position
-
-              if (foundKey) {
-                const created: Element | undefined = Elements.filter(current => current.name === foundKey)[0]
-                const newArray = [...images]
-
-                newArray.splice(i, 1)
-                newArray.splice(j - 1, 1)
-
-
-                if ((created !== undefined) && (images[images.length - 1]?.alt !== foundKey)) {
-                  newArray.push({
-                    alt: created.name,
-                    src: created.img,
-                    position: lastPosition
-                    // position: { x: 0, y: 0 }
-                  })
-
-                  setImages(newArray)
-                }
-              }
-            }
-          }
-        }
+    const imagesDOM = imageElementsArray.map((current: HTMLImageElement) => {
+      return {
+        alt: current.alt,
+        bottom: current.getBoundingClientRect().bottom,
+        height: current.getBoundingClientRect().height,
+        left: current.getBoundingClientRect().left,
+        right: current.getBoundingClientRect().right,
+        top: current.getBoundingClientRect().top,
+        width: current.getBoundingClientRect().width,
+        x: current.getBoundingClientRect().x,
+        y: current.getBoundingClientRect().y,
       }
-    };
-
-    checkForOverlaps();
+    })
+    setImagesDOM(imagesDOM)
   }, [images])
+
 
   const handleClick = (elementSended: Element) => {
     const newImage: Image = {
@@ -137,9 +135,9 @@ function main() {
         position: { x, y }
       }
     }));
-  };
 
-  console.log(images)
+    getAllElementsDB.mutate()
+  };
 
   return (
     <>
@@ -148,16 +146,20 @@ function main() {
         <meta name="description" content="Generated by create-t3-app" />
         <link rel="icon" href="https://littlealchemy.com/img/little-alchemy-1024-logo.png" />
       </Head>
-
-      <div data-theme="light" className='min-h-screen'>
+      <div onClick={() => getAllElementsDB.mutate()} data-theme="luxury" className='min-h-screen'>
+      {allElementsDB.length === 0 && <h1 className='text-3xl py-2 text-center'>Click anywhere to start</h1>}
         <div className='flex flex-row h-screen max-h-screen overflow-hidden'>
+          
           <Display
             images={images}
             deleteImage={deleteImage}
             handleImageLoad={handleImageLoad}
+            handleDrag={handleDrag}
+            handleReset={handleReset}
           />
           <ElementsLine
             handleClick={handleClick}
+            allElementsDB={allElementsDB}
           />
         </div>
       </div>

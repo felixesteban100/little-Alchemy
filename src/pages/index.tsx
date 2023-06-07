@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main data-theme="light" className="min-h-screen">
+      <main data-theme="dark" className="min-h-screen">
         <div className="w-full h-full">
           <div className="flex justify-center mx-auto py-5">
             <div className="flex flex-col justify-center gap-8">

@@ -4,6 +4,8 @@ type DisplayProps = {
   images: Image[]
   deleteImage: (image: Image, indexSended: number) => void
   handleImageLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void
+  handleDrag: () => void
+  handleReset: () => void
 }
 
 type Image = {
@@ -15,11 +17,15 @@ type Image = {
   }
 }
 
-function Display({ images, deleteImage, handleImageLoad }: DisplayProps) {
+
+// search for a way how to play a pop sound /public/pop.mp3
+
+
+function Display({ images, deleteImage, handleImageLoad, handleDrag, handleReset }: DisplayProps) {
   return (
     <div className='flex-1 border-r-4 border-white bg-base-200'>
       {images.map((image: Image, index: number) => (
-        <Draggable key={`${image.src}-${index}`} defaultPosition={{ x: image.position.x, y: image.position.y}}>
+        <Draggable key={`${image.src}-${index}`} defaultPosition={{ x: image.position.x, y: image.position.y }}>
           <div className={`z-${"10"} mx-auto absolute flex flex-col justify-center items-center`}>
             <img
               onAuxClick={(e) => {
@@ -30,8 +36,9 @@ function Display({ images, deleteImage, handleImageLoad }: DisplayProps) {
                 e.dataTransfer.dropEffect = "move";
                 e.preventDefault()
                 handleImageLoad(e)
+                handleDrag()
               }}
-              className='cursor-pointer h-auto w-24'
+              className='cursor-pointer h-auto w-24 img-display'
               src={image.src}
               alt={image.alt}
             />
@@ -39,6 +46,9 @@ function Display({ images, deleteImage, handleImageLoad }: DisplayProps) {
           </div>
         </Draggable>
       ))}
+      <button onClick={handleReset} className='btn btn-circle'>
+        Reset
+      </button>
     </div>
   )
 }
