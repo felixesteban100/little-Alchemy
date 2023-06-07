@@ -4,6 +4,7 @@ import ElementsLine from '~/components/ElementsLine'
 import Head from "next/head";
 import { api } from '~/utils/api';
 import { NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 // import Elements from '../server/elements.json'
 
 //https://littlealchemy.com
@@ -51,6 +52,8 @@ type ImageDOM = {
 }
 
 const Main: React.FC = () => {
+  const { data: sessionData } = useSession();
+
   const [images, setImages] = useState<Image[]>([]);
   const [imagesDOM, setImagesDOM] = useState<ImageDOM[]>([])
   const [allElementsDB, setAllElementsDB] = useState<Element[]>([])
@@ -99,24 +102,21 @@ const Main: React.FC = () => {
       setImagesDOM([])
     }
   })
-  
-  function changeTheme(){
+
+  function changeTheme() {
     setTheme(!theme)
   }
 
-  function handleReset(){
+  function handleReset() {
     resetAllElementsCreated.mutate()
 
     window.location.reload()
   }
 
-  function handleDrag(){
-    changeVisibilityElement.mutate({imageElements: imagesDOM, images})
+  function handleDrag() {
+    changeVisibilityElement.mutate({ imageElements: imagesDOM, images })
     getAllElementsDB.mutate()
   }
-
-  
-
 
   const handleClick = (elementSended: Element) => {
     const newImage: Image = {
@@ -156,9 +156,8 @@ const Main: React.FC = () => {
         <link rel="icon" href="https://littlealchemy.com/img/little-alchemy-1024-logo.png" />
       </Head>
       <div onClick={() => getAllElementsDB.mutate()} data-theme={theme ? "luxury" : 'light'} className='min-h-screen'>
-      {allElementsDB.length === 0 && <h1 className='text-3xl py-2 text-center'>Click anywhere to start</h1>}
+        {allElementsDB.length === 0 && <h1 className='text-3xl py-2 text-center'>Click anywhere to start</h1>}
         <div className='flex flex-row h-screen max-h-screen overflow-hidden'>
-          
           <Display
             images={images}
             deleteImage={deleteImage}
