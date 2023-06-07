@@ -50,7 +50,7 @@ type ImageDOM = {
   y: number,
 }
 
-const main: React.FC = () => {
+const Main: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
   const [imagesDOM, setImagesDOM] = useState<ImageDOM[]>([])
   const [allElementsDB, setAllElementsDB] = useState<Element[]>([])
@@ -165,8 +165,7 @@ const main: React.FC = () => {
         </div>
       </div>
     </>
-
   )
 }
 
-export default main
+export default Main
