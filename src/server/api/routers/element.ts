@@ -98,7 +98,6 @@ export const elementRouter = createTRPCRouter({
                         unlocked: true
                     },
                 });
-
                 const areOverlapping = (rect1: ImageDOM, rect2: ImageDOM): boolean => {
                     return (
                         rect1.left < rect2.right &&
@@ -107,7 +106,6 @@ export const elementRouter = createTRPCRouter({
                         rect1.bottom > rect2.top
                     );
                 };
-
                 const checkForOverlaps = async () => {
                     for (let i = 0; i < imageElements.length; i++) {
                         const rect1 = imageElements[i];
@@ -172,12 +170,10 @@ export const elementRouter = createTRPCRouter({
                         }
                     }
                 }
+                return checkForOverlaps()
             };
-            return checkForOverlaps()
-        }
-
             return images
-}),
+        }),
 
     reset: publicProcedure
         .mutation(async ({ ctx }) => {
