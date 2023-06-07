@@ -122,15 +122,18 @@ export const elementRouter = createTRPCRouter({
                                 // && (imageElements[i] !== undefined)
                                 // && (imageElements[j] !== undefined)
                             ) {
-                                const combination = `${imageElements[i]?.alt} + ${imageElements[j]?.alt}`
+                                const confirmCombination: string | undefined = `${imageElements[i]?.alt} + ${imageElements[j]?.alt}`
+                                const combination: string = confirmCombination ?? ""
 
                                 let foundKey: string | undefined;
 
-                                Object.entries(allCombinations).forEach(([key, value]) => {
-                                    if (Array.isArray(value) && value.includes(combination)) {
-                                        foundKey = key;
-                                    }
-                                });
+                                if (combination !== "") {
+                                    Object.entries(allCombinations).forEach(([key, value]) => {
+                                        if (Array.isArray(value) && value.includes(combination)) {
+                                            foundKey = key;
+                                        }
+                                    });
+                                }
 
                                 const lastPosition = image1.position
 
@@ -171,7 +174,7 @@ export const elementRouter = createTRPCRouter({
                     }
                 }
                 return checkForOverlaps()
-            };
+            }
             return images
         }),
 
@@ -186,7 +189,7 @@ export const elementRouter = createTRPCRouter({
                 data: {
                     unlocked: false
                 }
-            });
+            })
 
             await ctx.prisma.element.updateMany({
                 where: {
@@ -197,6 +200,6 @@ export const elementRouter = createTRPCRouter({
                 data: {
                     unlocked: true
                 }
-            });
+            })
         })
 });
