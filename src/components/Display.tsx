@@ -6,6 +6,9 @@ type DisplayProps = {
   handleImageLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void
   handleDrag: () => void
   handleReset: () => void
+
+  changeTheme: () => void
+  theme: boolean
 }
 
 type Image = {
@@ -21,7 +24,7 @@ type Image = {
 // search for a way how to play a pop sound /public/pop.mp3
 
 
-function Display({ images, deleteImage, handleImageLoad, handleDrag, handleReset }: DisplayProps) {
+function Display({ images, deleteImage, handleImageLoad, handleDrag, handleReset, theme, changeTheme }: DisplayProps) {
   return (
     <div className='flex-1 border-r-4 border-white bg-base-200'>
       {images.map((image: Image, index: number) => (
@@ -46,9 +49,14 @@ function Display({ images, deleteImage, handleImageLoad, handleDrag, handleReset
           </div>
         </Draggable>
       ))}
-      <button onClick={handleReset} className='btn btn-circle'>
-        Reset
-      </button>
+      <div className='flex gap-5'>
+        <button onClick={handleReset} className='btn btn-circle'>
+          Reset
+        </button>
+        <button onClick={changeTheme} className='btn btn-square'>
+          {theme ? "🌑" : "💡"}
+        </button>
+      </div>
     </div>
   )
 }
