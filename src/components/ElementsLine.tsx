@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 type Element = {
   id: string;
@@ -55,7 +54,7 @@ function ElementsLine({ handleClick, allElementsDB }: ElementsLineProps) {
                         return (
                           <tr key={index}>
                             <td className='flex items-center gap-2 cursor-grab' onClick={() => handleClick(obj)}>
-                              <Image className='h-10' src={obj.img} alt={obj.name} loading='lazy' />
+                              <img className='h-10' src={obj.img} alt={obj.name} loading='lazy' />
                               {obj.name}
                             </td>
                           </tr>

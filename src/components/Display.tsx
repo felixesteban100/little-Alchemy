@@ -1,6 +1,5 @@
 import Draggable from 'react-draggable';
 import AuthShowCase from './AuthShowCase';
-import Image from 'next/image';
 
 type DisplayProps = {
   images: Image[]
@@ -33,7 +32,7 @@ function Display({ images, deleteImage, handleImageLoad, handleDrag, handleReset
       {images.map((image: Image, index: number) => (
         <Draggable key={`${image.src}-${index}`} defaultPosition={{ x: image.position.x, y: image.position.y }}>
           <div className={`z-${"10"} mx-auto absolute flex flex-col justify-center items-center`}>
-            <Image
+            <img
               onAuxClick={(e) => {
                 e.preventDefault()
                 deleteImage(image, index)
