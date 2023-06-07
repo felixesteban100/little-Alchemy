@@ -122,8 +122,7 @@ export const elementRouter = createTRPCRouter({
                                 // && (imageElements[i] !== undefined)
                                 // && (imageElements[j] !== undefined)
                             ) {
-                                const confirmCombination: string | undefined = `${imageElements[i]?.alt} + ${imageElements[j]?.alt}`
-                                const combination: string = confirmCombination ?? ""
+                                const combination: string = `${imageElements[i]?.alt ?? ""} + ${imageElements[j]?.alt ?? ""}`
 
                                 let foundKey: string | undefined;
 
