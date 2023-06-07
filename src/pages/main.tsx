@@ -50,7 +50,7 @@ type ImageDOM = {
   y: number,
 }
 
-const main: NextPage = () => {
+const main: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
   const [imagesDOM, setImagesDOM] = useState<ImageDOM[]>([])
   const [allElementsDB, setAllElementsDB] = useState<Element[]>([])
