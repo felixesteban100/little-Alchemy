@@ -3,6 +3,7 @@ import Display from '~/components/Display'
 import ElementsLine from '~/components/ElementsLine'
 import Head from "next/head";
 import { api } from '~/utils/api';
+import { NextPage } from 'next';
 // import Elements from '../server/elements.json'
 
 //https://littlealchemy.com
@@ -49,7 +50,7 @@ type ImageDOM = {
   y: number,
 }
 
-function main() {
+const main: NextPage = () => {
   const [images, setImages] = useState<Image[]>([]);
   const [imagesDOM, setImagesDOM] = useState<ImageDOM[]>([])
   const [allElementsDB, setAllElementsDB] = useState<Element[]>([])

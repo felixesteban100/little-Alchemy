@@ -117,7 +117,13 @@ export const elementRouter = createTRPCRouter({
                             const rect2 = imageElements[j];
                             const image2 = images[j]
 
-                            if ((rect1 !== undefined && rect2 !== undefined) && (image1 !== undefined && image2 !== undefined) && (areOverlapping(rect1, rect2))) {
+                            if (
+                                (rect1 !== undefined && rect2 !== undefined)
+                                && (image1 !== undefined && image2 !== undefined)
+                                && (areOverlapping(rect1, rect2))
+                                // && (imageElements[i] !== undefined)
+                                // && (imageElements[j] !== undefined)
+                            ) {
                                 const combination = `${imageElements[i]?.alt} + ${imageElements[j]?.alt}`
 
                                 let foundKey: string | undefined;
@@ -165,12 +171,13 @@ export const elementRouter = createTRPCRouter({
                             }
                         }
                     }
-                };
-                return checkForOverlaps()
-            }
+                }
+            };
+            return checkForOverlaps()
+        }
 
             return images
-        }),
+}),
 
     reset: publicProcedure
         .mutation(async ({ ctx }) => {
@@ -185,17 +192,15 @@ export const elementRouter = createTRPCRouter({
                 }
             });
 
-            ELEMENTS_UNLOCKED_FROM_THE_BEGGINING.forEach(async (currentElement) => {
-                await ctx.prisma.element.updateMany({
-                    where: {
-                        name: {
-                            in: [...ELEMENTS_UNLOCKED_FROM_THE_BEGGINING]
-                        }
-                    },
-                    data: {
-                        unlocked: true
+            await ctx.prisma.element.updateMany({
+                where: {
+                    name: {
+                        in: [...ELEMENTS_UNLOCKED_FROM_THE_BEGGINING]
                     }
-                });
-            })
+                },
+                data: {
+                    unlocked: true
+                }
+            });
         })
 });
