@@ -1,4 +1,5 @@
 import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 
 export default function AuthShowCase(){
@@ -9,7 +10,7 @@ export default function AuthShowCase(){
         <p className="text-center text-2xl">
           {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         </p>
-        {sessionData?.user.image && <img src={sessionData.user?.image} alt="" />}
+        {sessionData?.user.image && <Image src={sessionData.user?.image} alt="" />}
         <button
           className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
           onClick={sessionData ? () => void signOut() : () => void signIn()}
@@ -18,4 +19,4 @@ export default function AuthShowCase(){
         </button>
       </div>
     );
-  };
+}
