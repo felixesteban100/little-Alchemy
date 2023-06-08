@@ -169,10 +169,6 @@ const Main: React.FC = () => {
       <div onClick={() => {
         if (sessionData?.user.id) {
           getAllElementsDB.mutate(sessionData?.user.id)
-
-          if(allElementsDB.length < 4){
-            resetAllElementsCreated.mutate(sessionData?.user.id)
-          }
         }
       }} data-theme={theme ? "luxury" : 'light'} className='min-h-screen'>
         {allElementsDB.length === 0 && <h1 className='text-3xl py-2 text-center'>Click anywhere to start</h1>}

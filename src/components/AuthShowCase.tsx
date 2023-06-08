@@ -1,18 +1,18 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { api } from "~/utils/api";
+// import { api } from "~/utils/api";
 
 export default function AuthShowCase(){
     const { data: sessionData } = useSession();
 
-    const getElementsByUser = api.user.getAllElementsByUser.useMutation({
+    /* const getElementsByUser = api.user.getAllElementsByUser.useMutation({
       onSuccess: (elements) => {
         console.log("elements", elements)
       }
-    })
+    }) */
 
-    function afterSignIn(){
+    /* function afterSignIn(){
         getElementsByUser.mutate()
-    }
+    } */
   
     return (
       <div className="flex flex-row items-center justify-center gap-4">
@@ -26,7 +26,7 @@ export default function AuthShowCase(){
             void signOut()
           } : () => {
             void signIn()
-            afterSignIn()
+            // afterSignIn()
           }}
         >
           {sessionData ? "Sign out" : "Sign in"}

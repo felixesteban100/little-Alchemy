@@ -43,6 +43,9 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        
+        // I added this one property Felix Monegro
+        unlockedElements: ['Fire', 'Earth', 'Water', 'Air']
       },
     }),
   },

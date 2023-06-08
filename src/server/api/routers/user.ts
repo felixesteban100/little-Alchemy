@@ -4,7 +4,6 @@ import {
     protectedProcedure,
     // publicProcedure,
 } from "~/server/api/trpc";
-import { useSession } from "next-auth/react";
 
 const ELEMENTS_UNLOCKED_FROM_THE_BEGGINING = ['Fire', 'Earth', 'Water', 'Air'] as const
 
@@ -66,14 +65,14 @@ const allCombinations: Combination = {
 }
 
 export const userRouter = createTRPCRouter({
-    getAllElementsByUser: protectedProcedure
+    /* getAllElementsByUser: protectedProcedure
         .mutation(async ({ ctx }) => {
             const { data: sessionData } = useSession();
 
             const userId = sessionData?.user.id
 
             console.log(userId)
-        }),
+        }), */
 
     unlockElement: protectedProcedure
         .input(z.object({
