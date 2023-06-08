@@ -15,8 +15,8 @@ export default function AuthShowCase(){
     } */
   
     return (
-      <div className="flex flex-row items-center justify-center gap-4">
-        <p className="text-center text-2xl">
+      <div className="flex flex-row items-center justify-center gap-4 py-2">
+        <p className="text-center text-md md:text-2xl">
           {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         </p>
         {sessionData?.user.image && <img className="h-8" src={sessionData.user?.image} alt="" />}
