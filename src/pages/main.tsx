@@ -169,32 +169,45 @@ const Main: React.FC = () => {
       <div onClick={() => {
         if (sessionData?.user.id) {
           getAllElementsDB.mutate(sessionData?.user.id)
+
+          // to avoid this I should find how to add the unlockedElements when the user is created in the database
+          //some files to achieve that:
+          //node_modules\next-auth\src\core\lib\email\getUserFromEmail.ts
+          //node_modules\next-auth\adapters.d.ts
+          //node_modules\next-auth\src\adapters.ts
+          //node_modules\next-auth\src\core\types.ts
+          //node_modules\@next-auth\prisma-adapter\dist\index.d.ts
+
+          if(allElementsDB.length < 4){
+            resetAllElementsCreated.mutate(sessionData?.user.id)
+          }
         }
       }} data-theme={theme ? "luxury" : 'light'} className='min-h-screen'>
         {allElementsDB.length === 0 && <h1 className='text-3xl py-2 text-center'>Click anywhere to start</h1>}
         <AuthShowCase />
         {
-          sessionData?.user ? 
-          <div className='flex flex-row h-screen max-h-screen overflow-hidden'>
-          <Display
-            images={images}
-            deleteImage={deleteImage}
-            handleImageLoad={handleImageLoad}
-            handleDrag={handleDrag}
-            handleReset={handleReset}
-            theme={theme}
-            changeTheme={changeTheme}
-          />
-          <ElementsLine
-            handleClick={handleClick}
-            allElementsDB={allElementsDB}
-          />
-        </div>
-        :
-        <div>
-          You must signing first in order to play
-        </div>
-        
+          (allElementsDB.length > 0 && sessionData?.user) ?
+            <div className='flex flex-row h-screen max-h-screen overflow-hidden'>
+              <Display
+                images={images}
+                deleteImage={deleteImage}
+                handleImageLoad={handleImageLoad}
+                handleDrag={handleDrag}
+                handleReset={handleReset}
+                theme={theme}
+                changeTheme={changeTheme}
+              />
+              <ElementsLine
+                handleClick={handleClick}
+                allElementsDB={allElementsDB}
+              />
+            </div>
+            :
+            null
+            /* <div>
+              You must signing first in order to play
+            </div> */
+
         }
       </div>
     </>
