@@ -44,8 +44,9 @@ export const authOptions: NextAuthOptions = {
         ...session.user,
         id: user.id,
         
+        unlockedElements: ['Fire', 'Earth', 'Air', 'Water']
         // I added this one property Felix Monegro
-        unlockedElements: user.unlockedElements
+        // unlockedElements: user.unlockedElements // this works on my machine but it doesn't in vercel, and the reason why i think is because node_modules does not have the modifications i made to adapter user
       },
     }),
   },
