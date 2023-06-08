@@ -1,95 +1,49 @@
 import { z } from "zod";
 import {
     createTRPCRouter,
-    publicProcedure,
-    // protectedProcedure,
+    // publicProcedure,
+    protectedProcedure,
 } from "~/server/api/trpc";
 
-const ELEMENTS_UNLOCKED_FROM_THE_BEGGINING = ['Fire', 'Earth', 'Water', 'Air'] as const
 
-type Element = {
-    id: string;
-    name: string;
-    img: string;
-    unlocked: boolean
-}
-
-type ImageDOM = {
-    alt: string;
-    bottom: number,
-    height: number,
-    left: number,
-    right: number,
-    top: number,
-    width: number,
-    x: number,
-    y: number,
-}
-
-const Image = z.object({
-    src: z.string(),
-    alt: z.string(),
-    position: z.object({
-        x: z.number(),
-        y: z.number()
-    })
-})
-
-const ImageElementSchema = z.object({
-    alt: z.string(),
-    bottom: z.number(),
-    height: z.number(),
-    left: z.number(),
-    right: z.number(),
-    top: z.number(),
-    width: z.number(),
-    x: z.number(),
-    y: z.number(),
-})
-// .merge(z.object({})).passthrough();
-
-type Combination = {
-    [key: string]: string[]
-}
-
-const allCombinations: Combination = {
-    "Dust": ["Earth + Air", "Air + Earth"]
-    , "Energy": ["Air + Fire", "Fire + Air"]
-    , "Lava": ["Earth + Fire", "Fire + Earth"]
-    , "Mud": ["Earth + Water", "Water + Earth"]
-    , "Pressure": ["Earth + Earth", "Air + Air"]
-    , "Rain": ["Water + Air", "Air + Water"]
-    , "Sea": ["Water + Water"]
-    , "Steam": ["Water + Fire", "Fire + Water", "Energy + Water", "Water + Energy"]
-    , "Atmosphere": ["Air + Pressure", "Pressure + Air", "Sky + Pressure", "Pressure + Sky"]
-    , "Brick": ["Clay + Fire", "Fire + Clay", "Mud + Fire", "Fire + Mud", "Clay + Sun", "Sun + Clay", "Mud + Sun", "Sun + Mud"]
-}
 
 export const elementRouter = createTRPCRouter({
-    getAllElements: publicProcedure
-        .mutation(async ({ ctx }) => {
-            return await ctx.prisma.element.findMany({
+    getAllElements: protectedProcedure
+        .input(z.string())
+        .mutation(async ({ ctx, input: idUserLogged }) => {
+            const elementsUnlockedByUser = await ctx.prisma.user.findUnique({
                 where: {
-                    unlocked: true
+                    id: idUserLogged
                 },
                 select: {
-                    id: true,
-                    name: true,
-                    img: true,
-                    unlocked: true
-                },
+                    unlockedElements: true
+                }
             });
+
+            if (elementsUnlockedByUser?.unlockedElements) {
+                return await ctx.prisma.element.findMany({
+                    where: {
+                        name: {
+                            in: elementsUnlockedByUser?.unlockedElements
+                        }
+                    },
+                    select: {
+                        id: true,
+                        name: true,
+                        img: true,
+                    },
+                });
+            }
+
+            return undefined
         }),
+});
 
-    unlockElement: publicProcedure
-        .input(z.object({
-            imageElements: z.array(ImageElementSchema) || z.array(z.undefined()),
-            images: z.array(Image)
-        }))
-        .mutation(async ({ ctx, input: { imageElements, images } }) => {
-            // LOOK FOR A WAY TO MAKE THIS FUNCTION FASTER
 
-            if (imageElements.length > 0) {
+
+
+
+/* if (imageElements.length > 0) {
                 const ElementsDb = await ctx.prisma.element.findMany({
                     select: {
                         id: true,
@@ -119,8 +73,6 @@ export const elementRouter = createTRPCRouter({
                                 (rect1 !== undefined && rect2 !== undefined)
                                 && (image1 !== undefined && image2 !== undefined)
                                 && (areOverlapping(rect1, rect2))
-                                // && (imageElements[i] !== undefined)
-                                // && (imageElements[j] !== undefined)
                             ) {
                                 const combination = `${imageElements[i]?.alt ?? ""} + ${imageElements[j]?.alt ?? ""}`;
 
@@ -174,31 +126,6 @@ export const elementRouter = createTRPCRouter({
                 }
                 return checkForOverlaps()
             }
-            return images
-        }),
+            return images */
 
-    reset: publicProcedure
-        .mutation(async ({ ctx }) => {
-            await ctx.prisma.element.updateMany({
-                where: {
-                    name: {
-                        not: "ALL"
-                    }
-                },
-                data: {
-                    unlocked: false
-                }
-            })
-
-            await ctx.prisma.element.updateMany({
-                where: {
-                    name: {
-                        in: [...ELEMENTS_UNLOCKED_FROM_THE_BEGGINING]
-                    }
-                },
-                data: {
-                    unlocked: true
-                }
-            })
-        })
-});
+            // the above way is for element unlocked inside each one

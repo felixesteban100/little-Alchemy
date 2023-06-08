@@ -1,6 +1,5 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import AuthShowCase from "~/components/AuthShowCase";
 
@@ -17,7 +16,7 @@ const Home: NextPage = () => {
         <div className="w-full h-full">
           <div className="flex justify-center mx-auto py-5">
             <div className="flex flex-col justify-center gap-8">
-              <Image className="h-32" src="/logoApp.png" alt="logo" />
+              <img className="h-32" src="/logoApp.png" alt="logo" />
               <Link className="w-full" href={'/main'}>
                 <button className="w-full h-28 btn btn-outline bg-[rgb(189,47,168)] text-5xl text-white py-6 text-center">PLAY</button>
               </Link>

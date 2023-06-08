@@ -1,5 +1,4 @@
 import Draggable from 'react-draggable';
-import AuthShowCase from './AuthShowCase';
 
 type DisplayProps = {
   images: Image[]
@@ -27,8 +26,8 @@ type Image = {
 
 function Display({ images, deleteImage, handleImageLoad, handleDrag, handleReset, theme, changeTheme }: DisplayProps) {
   return (
-    <div className='flex-1 border-r-4 border-white bg-base-200'>
-      <AuthShowCase />
+    <div className='flex-1 border-r-4 border-current bg-base-200'>
+      
       {images.map((image: Image, index: number) => (
         <Draggable key={`${image.src}-${index}`} defaultPosition={{ x: image.position.x, y: image.position.y }}>
           <div className={`z-${"10"} mx-auto absolute flex flex-col justify-center items-center`}>

@@ -3,7 +3,6 @@ type Element = {
   id: string;
   name: string;
   img: string;
-  unlocked: boolean
 }
 
 type ElementsLineProps = {
@@ -11,7 +10,7 @@ type ElementsLineProps = {
   allElementsDB: Element[]
 }
 
-
+// I SHOULD FIGURE A WAY OUT FOR HOW TO SAVE EACH ELEMENT LOCKED STATE FOR EACH USER ACCOUNT
 
 
 function ElementsLine({ handleClick, allElementsDB }: ElementsLineProps) {
@@ -50,7 +49,6 @@ function ElementsLine({ handleClick, allElementsDB }: ElementsLineProps) {
                   </thead>
                   <tbody className='w-full'>
                     {objects.map((obj, index) => {
-                      if (obj.unlocked === true) {
                         return (
                           <tr key={index}>
                             <td className='flex items-center gap-2 cursor-grab' onClick={() => handleClick(obj)}>
@@ -59,7 +57,6 @@ function ElementsLine({ handleClick, allElementsDB }: ElementsLineProps) {
                             </td>
                           </tr>
                         )
-                      }
                     })}
                   </tbody>
                 </table>

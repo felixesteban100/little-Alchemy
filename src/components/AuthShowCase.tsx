@@ -1,19 +1,33 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-
+import { api } from "~/utils/api";
 
 export default function AuthShowCase(){
     const { data: sessionData } = useSession();
+
+    const getElementsByUser = api.user.getAllElementsByUser.useMutation({
+      onSuccess: (elements) => {
+        console.log("elements", elements)
+      }
+    })
+
+    function afterSignIn(){
+        getElementsByUser.mutate()
+    }
   
     return (
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-row items-center justify-center gap-4">
         <p className="text-center text-2xl">
           {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         </p>
-        {sessionData?.user.image && <Image src={sessionData.user?.image} alt="" />}
+        {sessionData?.user.image && <img className="h-8" src={sessionData.user?.image} alt="" />}
         <button
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-          onClick={sessionData ? () => void signOut() : () => void signIn()}
+          className="rounded-full bg-secondary/10 px-10 py-3 font-semibold no-underline transition hover:bg-primary/20"
+          onClick={sessionData ? () => {
+            void signOut()
+          } : () => {
+            void signIn()
+            afterSignIn()
+          }}
         >
           {sessionData ? "Sign out" : "Sign in"}
         </button>
